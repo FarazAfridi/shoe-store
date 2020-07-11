@@ -1,0 +1,20 @@
+.cartIcon-container {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    margin-left: auto;
+}
+.cartIcon {
+    width: 24px;
+    height: 24px;
+}
+
+.cartIcon-span {
+    position: absolute; 
+    font-size: 1rem; 
+    bottom: 10px;
+}
