@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import CartIcon from "../cartIcon/cartIcon";
 import CartDropDown from "../cart-dropdown/cart.dropdown";
 import { CartContext } from "../../context/cart-context/cart-context";
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Navbar() {
-  const { hidden, logout } = useContext(CartContext);
+  const { hidden, logout, user, role } = useContext(CartContext);
   const classes = useStyles();
 
   return (
@@ -31,25 +31,33 @@ export default function Navbar() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6">
-            <NavLink className={classes.link} to="/">
+            <Link className={classes.link} to="/">
               Shop
-            </NavLink>
+            </Link>
           </Typography>
 
           <Typography variant="h6">
-            <NavLink className={classes.link} to="/checkout">
+            <Link className={classes.link} to="/checkout">
               Checkout
-            </NavLink>
+            </Link>
           </Typography>
+        {role && <Typography variant="h6">
+            <Link className={classes.link} to={"/admin"}>
+              Admin
+            </Link>
+          </Typography>}
           <Typography variant="h6">
-            <NavLink
+            <Link
               className={classes.link}
-              to="/login"
-              onClick={logout}
+              to={"/signup"}
+              onClick={() => {
+                user && logout();
+                }}
             >
-              Logout
-            </NavLink>
+              {user ? "Logout" : "Sign up"}
+            </Link>
           </Typography>
+
           <CartIcon />
           <div>{hidden ? null : <CartDropDown />}</div>
         </Toolbar>

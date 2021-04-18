@@ -37,5 +37,6 @@ export const filterItemFromCart = (cartItems, item) =>
 
 export const logoutUser = () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("role");
   return null;
 };

@@ -53,8 +53,13 @@ exports.login = (req, res) => {
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
-    
-      res.status(200).json({ token, userId: loadedUser._id.toString() });
+      res
+        .status(200)
+        .json({
+          token,
+          userId: loadedUser._id.toString(),
+          userRole: loadedUser.role,
+        });
     })
     .catch((err) => console.log(err));
 };

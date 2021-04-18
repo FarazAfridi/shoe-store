@@ -16,13 +16,17 @@ export default function CheckoutForm() {
   const [clientSecret, setClientSecret] = useState("");
   const stripe = useStripe();
   const elements = useElements();
+  
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
+    const token = localStorage.getItem("token");
+    if (token){
     window
       .fetch("http://localhost:4000/api/create-payment-intent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `bearar ${token}`
         },
         body: JSON.stringify({ items: cartItems }),
       })
@@ -32,6 +36,9 @@ export default function CheckoutForm() {
       .then((data) => {
         setClientSecret(data.clientSecret);
       });
+    } else {
+      navigate('/')
+    }
   }, []);
   const cardStyle = {
     style: {
@@ -75,13 +82,13 @@ export default function CheckoutForm() {
   };
   return (
     <div className="body">
-      <form id="payment-form" onSubmit={handleSubmit}>
+      <form className="form" id="payment-form" onSubmit={handleSubmit}>
         <CardElement
           id="card-element"
           options={cardStyle}
           onChange={handleChange}
         />
-        <button disabled={processing || disabled || succeeded} id="submit">
+        <button className="button" disabled={processing || disabled || succeeded} id="submit">
           <span id="button-text">
             {processing ? (
               <div className="spinner" id="spinner"></div>
@@ -100,9 +107,8 @@ export default function CheckoutForm() {
         <p className={succeeded ? "result-message" : "result-message hidden"}>
           Payment succeeded, see the result in your
           <a href={`https://dashboard.stripe.com/test/payments`}>
-            {" "}
             Stripe dashboard.
-          </a>{" "}
+          </a>
           Refresh the page to pay again.
         </p>
         {succeeded && navigate('/')}

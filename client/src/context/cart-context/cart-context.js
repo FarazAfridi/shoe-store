@@ -5,7 +5,7 @@ import {
   getTotal,
   filterItemFromCart,
   removeItemFromCart,
-  logoutUser
+  logoutUser,
 } from "./utils";
 export const CartContext = createContext({
   user: null,
@@ -19,6 +19,8 @@ export const CartContext = createContext({
   logout: () => {},
   cartItemCount: 0,
   cartItemTotal: 0,
+  productsCount: 0,
+  addProduct: () => {},
 });
 
 const CartProvider = ({ children }) => {
@@ -28,41 +30,12 @@ const CartProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [cartItemCount, setCartItemsCount] = useState(0);
   const [cartItemTotal, setCartItemTotal] = useState(0);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
     setCartItemsCount(getItemCount(cartItems));
     setCartItemTotal(getTotal(cartItems));
   }, [cartItems]);
-
-  useEffect(() => {
-    // const token = localStorage.getItem("token");
-    // if (token) {
-    //   setUser({ token });
-    //   fetch("http://localhost:4000/api/products", {
-    //     headers: {
-    //       Authorization: `bearar ${token}`,
-    //     },
-    //   })
-    //     .then((res) => res.json())
-    //     .then((resData) => setProducts(resData.products))
-    //     .catch((err) => console.log(err));
-    // } else {
-    //   setUser(null)
-    // }
-
-    // fetch("http://localhost:4000/api/product", {
-    //   method: 'POST',
-    //   headers: {'Content-Type': 'application/json'},
-    //   body: JSON.stringify({
-    //     title: 'Adidas Yeezy',
-    //     imageUrl: 'https://i.ibb.co/dJbG1cT/yeezy.png',
-    //     price: '280'
-    //   })
-    // })
-    // .then((res) => res.json())
-    // .then((resData) => setProducts(resData.products))
-    // .catch((err) => console.log(err));
-  }, []);
 
   const toggleHidden = () => setHidden(!hidden);
   const addItem = (item) => setCartItems(addCartItem(cartItems, item));
@@ -70,8 +43,11 @@ const CartProvider = ({ children }) => {
     setCartItems(removeItemFromCart(cartItems, item));
   const clearItemFromCart = (item) =>
     setCartItems(filterItemFromCart(cartItems, item));
-  const logout = () => setUser(logoutUser());
-
+  const logout = () => {
+    setRole(null);
+    setUser(logoutUser());
+  };
+  const addProduct = (item) => setProducts(addCartItem(products, item));
   return (
     <CartContext.Provider
       value={{
@@ -88,6 +64,9 @@ const CartProvider = ({ children }) => {
         logout,
         setProducts,
         setUser,
+        setRole,
+        role,
+        addProduct
       }}
     >
       {children}
