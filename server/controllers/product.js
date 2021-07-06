@@ -50,10 +50,11 @@ exports.checkout =  async (req, res) => {
       (acc, cartItem) => acc + cartItem.price * cartItem.quantity,
       0
     );
-    return total;
+    return total * 100;
   };
 
   const { items } = req.body;
+  console.log(calculateOrderAmount(items))
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
     amount: calculateOrderAmount(items),

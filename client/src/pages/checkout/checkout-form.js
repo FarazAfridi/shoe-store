@@ -16,7 +16,7 @@ export default function CheckoutForm() {
   const [clientSecret, setClientSecret] = useState("");
   const stripe = useStripe();
   const elements = useElements();
-  
+  console.log(cartItems)
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
     const token = localStorage.getItem("token");
