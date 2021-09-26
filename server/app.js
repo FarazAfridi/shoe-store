@@ -19,6 +19,8 @@ app.use((req, res, next) => {
 app.use('/api', productRoutes)
 app.use('/auth', authRoutes)
 
+const PORT = process.env.PORT || 4000;
+
 mongoose
   .connect(
     process.env.MONGODB_KEY,
@@ -30,6 +32,6 @@ mongoose
     }
   )
   .then((result) => {
-    app.listen(4000);
+    app.listen(PORT);
   })
   .catch((err) => console.log(err));
